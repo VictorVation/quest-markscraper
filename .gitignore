@@ -7,7 +7,8 @@ lib-cov
 *.pid
 *.gz
 
-
+garbage
+.env
 pids
 logs
 results

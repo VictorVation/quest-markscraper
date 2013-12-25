@@ -2,14 +2,12 @@ var express = require("express");
 var logfmt = require("logfmt");
 var request = require("request").defaults({jar: true}); // We need cookies
 var cheerio = require("cheerio");
-var config = require("./config");
-var _ = require('underscore');
-
-var fs = require('fs')
+var _ = require("underscore");
 var app = express();
 
-var username = config.username;
-var password = config.PWD;
+// Replace the following two lines with your username and password 
+var username = process.env.qUsername    // "questUsername"
+var password = process.env.qPWD         // "questPassword"
 var base = 'https://quest.pecs.uwaterloo.ca/';
 
 var reqOpts =  {
@@ -26,13 +24,18 @@ var reqOpts =  {
     }
 }
 
-app.get('/', function(req, res) {
-	// Logging in
+app.get('/', function(req, res, next) {
+    if( !username || !password) {
+        res.end("Quest username or password is empty.")
+        return;
+	}
+    
+    // Logging in                              
 	reqOpts.url = base + "psp/SS/?cmd=login&languageCd=ENG";
 	request.post(reqOpts, function(error, response, body) {
 		console.log("Logged in as " + username)
 		reqOpts.form = {};
-
+        
 		// Landing page
 		reqOpts.url = base + "psp/SS/ACADEMIC/SA/h/?tab=DEFAULT";
 		request.get( reqOpts, function(error, response, body) {
@@ -86,17 +89,19 @@ app.get('/', function(req, res) {
 										grades.push( $(this).text() )
 									})	
 									console.log ("Grades scraped")
-
+    
 									classes.shift();
 									grades.shift();
-
 									var allAvailable = classes.length == grades.length;
 									var gradeObj = _.object(classes, grades); 
 									if (allAvailable)
 										returnJSON = _.extend({"allAvailable" : allAvailable}, {grades: gradeObj});
 									else
 										returnJSON = {"allAvailable" : allAvailable}
+                                        
+                                    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
   									res.send(returnJSON);
+                                    console.log("Response sent");
 								})
 							})
 						})
@@ -106,7 +111,6 @@ app.get('/', function(req, res) {
 		})
 	});
 });
-
 
 app.use(logfmt.requestLogger());
 var port = process.env.PORT || 5000;
