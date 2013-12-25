@@ -1,0 +1,26 @@
+{
+  "name": "quest-markscraper",
+  "version": "0.0.0",
+  "description": "Scrapes marks from Waterloo Quest, and if all marks are available, returns grades.",
+  "main": "quest-markscraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VictorVation/quest-markscraper"
+  },
+  "author": "Victor Szeto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VictorVation/quest-markscraper/issues"
+  },
+  "homepage": "https://github.com/VictorVation/quest-markscraper",
+  "dependencies": {
+    "underscore": "~1.5.2",
+    "logfmt": "~0.18.1",
+    "request": "~2.30.0",
+    "cheerio": "~0.12.4",
+    "express": "~3.4.7"
+  }
+}
