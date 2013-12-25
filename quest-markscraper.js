@@ -9,33 +9,35 @@ var app = express();
 var username = process.env.qUsername    // "questUsername"
 var password = process.env.qPWD         // "questPassword"
 var base = 'https://quest.pecs.uwaterloo.ca/';
+var j = request.jar();
 
-var reqOpts =  {
-	url: base + "",
-	form: {
-		timezoneOffset: 0,
-		userid: username,
-		pwd: password,
-		Submit: "Sign in",
-		httpPort: ""
-	},
-    headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:2.0b6) Gecko/20100101 Firefox'
-    }
-}
 
-app.get('/', function(req, res, next) {
+app.get('/', function(req, res) {
     if( !username || !password) {
         res.end("Quest username or password is empty.")
         return;
 	}
-    
+
+    var reqOpts =  {
+		url: base,
+		form: {
+			timezoneOffset: 0,
+			userid: username,
+			pwd: password,
+			Submit: "Sign in",
+			httpPort: ""
+		},
+	    headers: {
+	        'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:2.0b6) Gecko/20100101 Firefox'
+	    }
+	}
+
     // Logging in                              
 	reqOpts.url = base + "psp/SS/?cmd=login&languageCd=ENG";
 	request.post(reqOpts, function(error, response, body) {
 		console.log("Logged in as " + username)
 		reqOpts.form = {};
-        
+
 		// Landing page
 		reqOpts.url = base + "psp/SS/ACADEMIC/SA/h/?tab=DEFAULT";
 		request.get( reqOpts, function(error, response, body) {
@@ -101,7 +103,9 @@ app.get('/', function(req, res, next) {
                                         
                                     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
   									res.send(returnJSON);
+
                                     console.log("Response sent");
+                                    return;
 								})
 							})
 						})
