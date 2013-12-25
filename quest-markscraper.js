@@ -101,7 +101,7 @@ app.get('/', function(req, res) {
 									else
 										returnJSON = {"allAvailable" : allAvailable}
                                         
-                                    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+                                    res.setHeader('Access-Control-Allow-Origin', '*');
   									res.send(returnJSON);
 
                                     console.log("Response sent");
