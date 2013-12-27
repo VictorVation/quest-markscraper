@@ -94,7 +94,7 @@ app.get('/', function(req, res) {
     
 									classes.shift();
 									grades.shift();
-									var allAvailable = classes.length == grades.length;
+									var allAvailable = (classes.length == grades.length && classes.length > 1);
 									var gradeObj = _.object(classes, grades); 
 									if (allAvailable)
 										returnJSON = _.extend({"allAvailable" : allAvailable}, {grades: gradeObj});
