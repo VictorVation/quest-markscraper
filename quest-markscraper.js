@@ -9,8 +9,6 @@ var app = express();
 var username = process.env.qUsername    // "questUsername"
 var password = process.env.qPWD         // "questPassword"
 var base = 'https://quest.pecs.uwaterloo.ca/';
-var j = request.jar();
-
 
 app.get('/', function(req, res) {
     if( !username || !password) {
