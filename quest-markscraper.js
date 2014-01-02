@@ -17,7 +17,6 @@ app.get('/', function(req, res) {
 	}
 
     var reqOpts =  {
-		url: base,
 		form: {
 			timezoneOffset: 0,
 			userid: username,
@@ -89,9 +88,7 @@ app.get('/', function(req, res) {
 										grades.push( $(this).text() )
 									})	
 									console.log ("Grades scraped")
-    
-									classes.shift();
-									grades.shift();
+    								classes.shift();
 									var allAvailable = (classes.length == grades.length && classes.length > 1);
 									var gradeObj = _.object(classes, grades); 
 									if (allAvailable)
