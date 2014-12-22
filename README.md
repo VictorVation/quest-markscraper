@@ -7,7 +7,7 @@ Mark scraper for UWaterloo Quest written in Node.js. A HTTP GET request to the s
 ```JSON
 {
 	"allAvailable": true
-	grades: {
+	"grades": {
     	"CHE 102": 95,
     	"ECE 100A": 100,
     	"ECE 105": 89

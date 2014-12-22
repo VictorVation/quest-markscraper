@@ -1,11 +1,9 @@
-var express = require("express");
-var logfmt = require("logfmt");
+var app = require("express")();
 var request = require("request").defaults({jar: true}); // We need cookies
 var cheerio = require("cheerio");
-var _ = require("underscore");
-var app = express();
+var _ = require("lodash");
 
-// Replace the following two lines with your username and password 
+// Replace the following two lines with your username and password
 var username = process.env.qUsername    // "questUsername"
 var password = process.env.qPWD         // "questPassword"
 var base = 'https://quest.pecs.uwaterloo.ca/';
@@ -29,7 +27,7 @@ app.get('/', function(req, res) {
 	    }
 	}
 
-    // Logging in                              
+    // Logging in
 	reqOpts.url = base + "psp/SS/?cmd=login&languageCd=ENG";
 	request.post(reqOpts, function(error, response, body) {
 		console.log("Logged in as " + username)
@@ -41,7 +39,7 @@ app.get('/', function(req, res) {
 		console.log("Opened landing page")
 
 			// Follow redirect
-			reqOpts.url = base + "psp/SS/ACADEMIC/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?FolderPath=PORTAL_ROOT_OBJECT.HC_SSS_STUDENT_CENTER&IsFolder=false&IgnoreParamTempl=FolderPath%2cIsFolder";		
+			reqOpts.url = base + "psp/SS/ACADEMIC/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?FolderPath=PORTAL_ROOT_OBJECT.HC_SSS_STUDENT_CENTER&IsFolder=false&IgnoreParamTempl=FolderPath%2cIsFolder";
 			request.get (reqOpts, function(error, response, body) {
 			console.log("Landing page redirect followed")
 
@@ -64,12 +62,12 @@ app.get('/', function(req, res) {
 						request.get(reqOpts, function(error, response, body) {
 						console.log("\"My Academics\" redirect followed")
 
-							// Click "Grades" 
+							// Click "Grades"
 							reqOpts.url = base + "psc/SS/ACADEMIC/HRMS/c/SA_LEARNER_SERVICES.SSR_SSENRL_GRADE.GBL?Page=SSR_SSENRL_GRADE&Action=A";
 							request.get(reqOpts, function(error, response, body) {
 								console.log("Clicked \"Grades\"")
 
-								// Select current term 
+								// Select current term
 								reqOpts.url = base + "psc/SS/ACADEMIC/HRMS/c/SA_LEARNER_SERVICES.SSR_SSENRL_GRADE.GBL"
 								reqOpts.form = {
 									ICAction : "DERIVED_SSS_SCT_SSR_PB_GO",
@@ -78,24 +76,24 @@ app.get('/', function(req, res) {
 								request.post(reqOpts, function(error, response, body) {
 									console.log("Term selected")
 									var classes = []
-									var grades = []	
+									var grades = []
 									var $ = cheerio.load(body);
 									$('a.PSHYPERLINK').each( function(i,element) {
 										classes.push( $(this).text() )
-									})	
+									})
 									console.log ("Classes scraped")
 									$('.PABOLDTEXT').each( function(i,element) {
 										grades.push( $(this).text() )
-									})	
+									})
 									console.log ("Grades scraped")
     								classes.shift();
 									var allAvailable = (classes.length == grades.length && classes.length > 1);
-									var gradeObj = _.object(classes, grades); 
+									var gradeObj = _.object(classes, grades);
 									if (allAvailable)
 										returnJSON = _.extend({"allAvailable" : allAvailable}, {grades: gradeObj});
 									else
 										returnJSON = {"allAvailable" : allAvailable}
-                                        
+
                                     res.setHeader('Access-Control-Allow-Origin', '*');
   									res.send(returnJSON);
 
@@ -111,7 +109,6 @@ app.get('/', function(req, res) {
 	});
 });
 
-app.use(logfmt.requestLogger());
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
 console.log("Listening on " + port);
