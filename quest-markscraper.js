@@ -16,7 +16,7 @@ var getGrades = function(req, res) {
 
 	var path = req.path.slice(1);
 
-	if (!_.isEmpty(term)) {
+	if (!_.isEmpty(path)) {
 		var term = '';
 
 		switch(_.first(path).toLowerCase()) {
@@ -86,11 +86,12 @@ var getGrades = function(req, res) {
 								var $ = cheerio.load(body);
 
 								// Select current term using terrible dom/regex/whatever hack
-								var re = /value="(\d)/
+								var re = /value="(\d)/;
+								console.log(term);
 								var termNumber = _.isEmpty(term)
 									? '2'
 									: re.exec($('tr:contains(' + term + ')').last().children().children().html())[1];
-
+									console.log(termNumber);
 								reqOpts.url = base + 'psc/SS/ACADEMIC/HRMS/c/SA_LEARNER_SERVICES.SSR_SSENRL_GRADE.GBL'
 								reqOpts.form = {
 									ICAction : 'DERIVED_SSS_SCT_SSR_PB_GO',
@@ -114,9 +115,9 @@ var getGrades = function(req, res) {
 									var allAvailable = (classes.length == grades.length && classes.length > 1);
 									var gradeObj = _.object(classes, grades);
 									if (allAvailable)
-										returnJSON = _.extend({'allAvailable' : allAvailable}, {grades: gradeObj});
+										returnJSON = _.extend({'allAvailable' : allAvailable}, {term: term, grades: gradeObj});
 									else
-										returnJSON = {'allAvailable' : allAvailable}
+										returnJSON = {'allAvailable' : allAvailable, term: term}
 
                                     res.setHeader('Access-Control-Allow-Origin', '*');
   									res.send(returnJSON);
@@ -133,7 +134,7 @@ var getGrades = function(req, res) {
 	})
 }
 
-app.get('/', getGrades);
+app.get('/^$', getGrades);
 app.get('/(^$|[fwsFWS]{1}\\d{2}$)', getGrades);
 
 var port = process.env.PORT || 5000;
