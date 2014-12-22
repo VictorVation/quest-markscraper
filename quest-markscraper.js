@@ -22,7 +22,7 @@ var getGrades = function(req, res) {
 		switch(_.first(path).toLowerCase()) {
 			case 'f': term += 'Fall '; break;
 			case 'w': term += 'Winter '; break;
-			case 's': term += 'Summer '; break;
+			case 's': term += 'Spring '; break;
 	    default: res.end('Invalid term.'); return;
 		}
 
