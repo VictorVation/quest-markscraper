@@ -1,12 +1,43 @@
-# quest-markscraper
+# quest-markscraper 
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 Mark scraper for UWaterloo Quest written in Node.js. A HTTP GET request to the server returns a JSON object containing a bool stating whether all grades are available, and an object containing the actual grades.
 
-### Request
+* If all grades are available:
+
+```JSON
+{
+    "allAvailable": true,
+    "term": "Fall 2013",
+    "grades": {
+        "CHE 102": 95,
+        "ECE 100A": 100,
+        "ECE 105": 89,
+        "ECE 140": 95,
+        "ECE 150": 99,
+        "MATH 117": 92
+    }
+}
+```
+
+* Otherwise:
+
+```JSON
+{   
+    "allAvailable": false,
+    "term": "Fall 2013"
+}
+```
+
+### Usage
 To get the grades, simply send the following request, where `{term}` is the term that you want grades for - in the format one letter, followed by the last two digits of the year e.g. `W13`, `F13`. It's optional, if you leave it blank then you'll get the grades for the third oldest term.
+```
+GET /[{term}]
+```
 
-Default term:
-
+#### Examples
+Get marks from most recent term:
 ```
 >> GET /
 << {
@@ -41,35 +72,10 @@ Get marks from Fall 2014:
 }
 ```
 
-### Response
-
-* If all marks are available: 
-
-```JSON
-{
-	"allAvailable": true,
-    "term": "Fall 2013",
-	"grades": {
-    	"CHE 102": 95,
-    	"ECE 100A": 100,
-    	"ECE 105": 89,
-    	"ECE 140": 95,
-    	"ECE 150": 99,
-    	"MATH 117": 92
-    }
-}
-```
-
-* Otherwise:
-
-```JSON
-{   
-    "allAvailable": false,
-    "term": "Fall 2013"
-}
-```
-
 ## Installation:
+One click deploy to Heroku: [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+Or to install locally:
 
 1. `git clone https://github.com/VictorVation/quest-markscraper.git`
 2. `cd quest-markscraper`

@@ -1,0 +1,17 @@
+{
+  "name": "quest-markscraper",
+  "description": "A simple UWaterloo grades API. Scrape and serve grades directly from Quest.",
+  "repository": "https://github.com/victorvation/quest-markscraper",
+  "website": "http://www.victorszeto.com/",
+  "logo": "http://vsz.me/i/QUEST.png",
+  "env": {
+    "QUEST_USER": {
+      "description": "Your UWaterloo Quest username. This is securely saved in Heroku config.",
+      "value": "**REQUIRED**"
+    },
+    "QUEST_PWD": {
+      "description": "Your UWaterloo Quest password. This is securely saved in Heroku config.",
+      "value": "**REQUIRED**"
+    }
+  }
+}
