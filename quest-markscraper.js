@@ -103,31 +103,27 @@ var getGrades = function(req, res) {
 								}
 								request.post(reqOpts, function(error, response, body) {
 									//console.log('Term selected')
-									var classes = []
-									var grades = []
+									var classes = [];
+									var grades = [];
 
 									var $ = cheerio.load(body);
 									$('a.PSHYPERLINK').each( function(i,element) {
 										classes.push( $(this).text() )
-									})
+									});
 									//console.log ('Classes scraped')
 									$('.PABOLDTEXT').each( function(i,element) {
 										grades.push( $(this).text() )
-									})
+									});
 									//console.log ('Grades scraped')
-    								classes.shift();
-									var allAvailable = (classes.length == grades.length && classes.length > 1);
+  								classes.shift();
+
 									var gradeObj = _.object(classes, grades);
-									if (allAvailable)
-										returnJSON = _.extend({'allAvailable' : allAvailable}, {term: term, grades: gradeObj});
-									else
-										returnJSON = {'allAvailable' : allAvailable, term: term}
+									returnJSON = { term: term, grades: gradeObj };
 
-                                    res.setHeader('Access-Control-Allow-Origin', '*');
-  									res.send(returnJSON);
-
-                                    console.log('Response sent');
-                                    return;
+	                res.setHeader('Access-Control-Allow-Origin', '*');
+									res.send(returnJSON);
+	                console.log('Response sent');
+	                return;
 								})
 							})
 						})

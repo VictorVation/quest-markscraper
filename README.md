@@ -2,13 +2,12 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-Mark scraper for UWaterloo Quest written in Node.js. A HTTP GET request to the server returns a JSON object containing a bool stating whether all grades are available, and an object containing the actual grades.
+Mark scraper for UWaterloo Quest written in Node.js. A HTTP GET request to the server returns a JSON object containing the grades.
 
 * If all grades are available:
 
 ```JSON
 {
-    "allAvailable": true,
     "term": "Fall 2013",
     "grades": {
         "CHE 102": 95,
@@ -25,7 +24,6 @@ Mark scraper for UWaterloo Quest written in Node.js. A HTTP GET request to the s
 
 ```JSON
 {   
-    "allAvailable": false,
     "term": "Fall 2013"
 }
 ```
@@ -41,7 +39,6 @@ Get marks from most recent term:
 ```
 >> GET /
 << {
-    "allAvailable": true,
     "term": "Fall 2013",
     "grades": {
         "CHE 102": "95",
@@ -58,7 +55,6 @@ Get marks from Fall 2014:
 ```
 >> GET /f14
 << {
-    "allAvailable":true,
     "term":"Fall 2014",
     "grades": {
         "ECE 200A": "CR",
