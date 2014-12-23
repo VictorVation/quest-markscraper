@@ -86,11 +86,16 @@ var getGrades = function(req, res) {
 
 								// Select current term using terrible dom/regex/whatever hack
 								var re = /value="(\d)/;
-								console.log(term);
+
 								var termNumber = _.isEmpty(term)
 									? '2'
 									: re.exec($('tr:contains(' + term + ')').last().children().children().html())[1];
-									console.log(termNumber);
+
+								if (_.isUndefined(termNumber)) {
+									res.send("Invalid term.");
+									return;
+								}
+								console.log('Term is', term, '['+termNumber+']');
 								reqOpts.url = base + 'psc/SS/ACADEMIC/HRMS/c/SA_LEARNER_SERVICES.SSR_SSENRL_GRADE.GBL'
 								reqOpts.form = {
 									ICAction : 'DERIVED_SSS_SCT_SSR_PB_GO',
@@ -133,10 +138,10 @@ var getGrades = function(req, res) {
 	})
 }
 
-app.get('/^$', getGrades);
+app.get('/', getGrades);
 app.get('/(^$|[fwsFWS]{1}\\d{2}$)', getGrades);
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
-//console.log('Listening on ' + port);
+	//console.log('Listening on ' + port);
 });
