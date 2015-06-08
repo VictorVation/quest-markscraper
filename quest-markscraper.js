@@ -2,6 +2,7 @@ var app = require('express')();
 var request = require('request').defaults({jar: true}); // We need cookies
 var cheerio = require('cheerio');
 var _ = require('lodash');
+var morgan = require('morgan')
 
 // Replace the following two lines with your username and password
 var username = process.env.QUEST_USER    // 'questUsername';
@@ -106,8 +107,6 @@ var getGrades = function(req, res) {
 
                   res.setHeader('Access-Control-Allow-Origin', '*');
                   res.send(returnJSON);
-                  console.log('Response sent');
-                  return;
                 })
               })
             })
@@ -125,6 +124,8 @@ var extractText = function ($, selector) {
     }
   }).get();
 };
+
+app.use(morgan('combined'))
 
 app.get('/', getGrades);
 app.get('/(^$|[fwsFWS]{1}\\d{2}$)', getGrades);
