@@ -102,7 +102,7 @@ var getGrades = function(req, res) {
                   var grades = extractText$('.PABOLDTEXT');
 
                   var gradeObj = _.zipObject(classes, grades);
-                  returnJSON = { term: term, grades: gradeObj };
+                  var returnJSON = { term: term, grades: gradeObj };
 
                   res.setHeader('Access-Control-Allow-Origin', '*');
                   res.send(returnJSON);
