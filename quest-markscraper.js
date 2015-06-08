@@ -96,19 +96,12 @@ var getGrades = function(req, res) {
                   SSR_DUMMY_RECV1$sels$0: termNumber
                 }
                 request.post(reqOpts, function(error, response, body) {
-                  var classes = [];
-                  var grades = [];
-
                   var $ = cheerio.load(body);
-                  $('a.PSHYPERLINK').each(function(i, element) {
-                    classes.push( $(this).text() )
-                  });
-                  $('.PABOLDTEXT').each(function(i, element) {
-                    grades.push( $(this).text() )
-                  });
-                  classes.shift();
+                  var extractText$ = _.partial(extractText, $);
+                  var classes = extractText$('a.PSHYPERLINK');
+                  var grades = extractText$('.PABOLDTEXT');
 
-                  var gradeObj = _.object(classes, grades);
+                  var gradeObj = _.zipObject(classes, grades);
                   returnJSON = { term: term, grades: gradeObj };
 
                   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -124,6 +117,14 @@ var getGrades = function(req, res) {
     })
   })
 }
+
+var extractText = function ($, selector) {
+  return $(selector).map(function () {
+    if ($(this).text()) {
+      return $(this).text();
+    }
+  }).get();
+};
 
 app.get('/', getGrades);
 app.get('/(^$|[fwsFWS]{1}\\d{2}$)', getGrades);
